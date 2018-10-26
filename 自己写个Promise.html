@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自己写个Promise</title>
+</head>
+
+<body>
+    <script>
+        // 定义一个Promise2
+        class Promise2 {
+            constructor(fn) {
+                const _this = this;
+
+                this._query = [];
+                this._success_res = null;
+                this._error_res = null;
+                this.status = '';
+
+                fn(function(...arg) {
+                    _this._success_res = arg;
+                    _this.status = 'success';
+                    _this._query.forEach(json => {
+                        json.fn1(...arg);
+                    });
+                }, function(...arg) {
+                    _this._error_res = arg;
+                    _this.status = 'error';
+                    _this._query.forEach(json => {
+                        json.fn2(...arg);
+                    });
+                });
+
+            }
+
+            then(fn1, fn2) {
+                if (this.status == 'success') {
+                    fn1(..._this._success_res);
+                } else if (this.status == 'error') {
+                    fn2(..._this._error_res);
+                } else {
+                    this._query.push({
+                        fn1,
+                        fn2
+                    });
+                }
+            }
+        }
+        Promise2.all = function(arr) {
+            let aResult = [];
+            return new Promise2(function(resolve, reject) {
+                let i = 0;
+
+                next();
+
+                function next() {
+                    arr[i].then(function(res) {
+                        aResult.push(res);
+                        i++;
+                        if (i == arr.length) {
+                            resolve(aResult);
+                        } else {
+                            next();
+                        }
+                    }, reject);
+                }
+            })
+        }
+
+        // 调用
+        let pro = new Promise2(function(resolve, reject) {
+            setTimeout(function() {
+                resolve(12);
+            }, 500);
+        });
+
+        pro.then(function(num) {
+            alert(num);
+        }, function() {
+            alert("错误");
+        });
+    </script>
+</body>
+
+</html>

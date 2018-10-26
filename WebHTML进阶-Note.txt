@@ -1,0 +1,76 @@
+数据交互：
+1.http协议
+2.form
+3.ajax
+4.jsonp
+5.websocket
+其他的数据交互方式都是模拟form表单提交数据，都包含form表单的必要项
+
+HTTP协议：
+1.无状态的协议
+2.连接过程：连接，接收，发送请求
+3.HTTP请求消息分成两部分，包含请求头(<=32K)、请求体(<=2G)
+
+
+前端怎样处理HTTP缓存：
+1.给请求中加一个随机数
+2.通过Cache-Control，Date
+
+
+FORM表单：
+1.action -- 请求的地址
+2.method -- 请求方式 GET/POST/PUT/DELETE/HEAD
+GET: 把数据放到URL里面传输，因为是放在请求头中传输，传输数据量小，GET方式会自动缓存
+POST: 放在请求体中传输，传输数据量大，不会缓存
+
+请求方式语义上的区别：
+GET -- 获取一些数据
+POST/PUT -- 发送一些数据，大量的
+DELETE -- 删除
+HEAD -- 让服务器只发送头部信息（不需要内容），主要用来检测服务器连接是否正常。form表单提交head是无效的，ajax是可以发送的
+
+注：请求的数据量很大，需要用其他协议请求，比如TCP/IP协议 
+
+POST方式比GET方式安全？
+如果用表单方式提交，GET确实不安全，可以通过URL看见；如果使用其他方式，如ajax，GET和POST是没有区别的。
+
+3.name -- 名字
+
+4.enctype -- 发送到服务器之前应该如何对表单数据进行编码
+  
+HTTP状态码：
+1** : 消息
+2** : 成功
+3** : 重定向
+  301: //永久移动  请求的网页已永久移动到新位置。下次请求时请求重定向后的服务器
+  302: //临时移动  服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来进行以后的请求
+4** : 请求错误
+5** : 服务器错误
+
+实现组件的方式：
+1.seajs,requirejs
+2.nodejs
+3.ES6
+
+
+
+记：
+JSONP只支持GET请求
+ajax正常是只能请求服务器的数据，jax跨域容易遭受xss攻击
+性能优化是一种编码习惯
+算法 离散数学，设计模式
+http只能传输文本信息，socket.io传输二进制文件
+package.json记录、安装依赖包
+forEach(); 是个回调函数，不同于for循环，它是对数组的每一项进行处理
+
+HTML5新特性：
+geolocation                定位
+video、audio               视频、音频
+websocket推送 + video
+canvas+video
+canvas                     绘图
+localStorage               本地存储（代替cookie）
+sessionStorage
+WebSQL
+WebWorker                  多线程
+拖拽、读取

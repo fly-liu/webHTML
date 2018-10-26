@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .mine {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <p>用户：<input type="text" id="user"></p>
+    <p>密码：<input type="password" id="pass"></p>
+    <input type="button" value="注册" id="btn1">
+    <input type="button" value="登录" id="btn2">
+
+    <p><textarea name="" id="txt" cols="50" rows="10"></textarea></p>
+    <input type="button" value="发送" id="btn_send">
+    <ul id="oUl"></ul>
+</body>
+<script src="http://localhost:8082/socket.io/socket.io.js"></script>
+<script>
+    let socket = io.connect('ws://localhost:8082/');
+
+    window.onload = function() {
+        let cur_username = '';
+        let oBtn1 = document.getElementById('btn1');
+        let oBtn2 = document.getElementById('btn2');
+        let oBtnSend = document.getElementById('btn_send');
+        let oUser = document.getElementById('user');
+        let oPass = document.getElementById('pass');
+        let oTxt = document.getElementById('txt');
+        let oUl = document.getElementById('oUl');
+
+        // 注册
+        socket.on('reg_ret', (code, msg) => {
+            if (!code) {
+                alert('注册失败,' + msg);
+            } else {
+                alert('注册成功');
+            }
+        });
+        oBtn1.onclick = function() {
+            socket.emit('reg', oUser.value, oPass.value);
+        }
+
+        // 登录
+        socket.on('login_ret', (code, msg) => {
+            if (!code) {
+                alert('登录出错,' + msg);
+            } else {
+                alert('登录成功');
+                cur_username = oUser.value;
+            }
+        });
+        oBtn2.onclick = function() {
+            socket.emit('login', oUser.value, oPass.value);
+        };
+
+        // 消息
+        socket.on('msg_ret', (code, msg) => { // 发送消息返回结果
+            if (!code) {
+                alert('消息发送失败，' + msg);
+            } else {
+                let oLi = document.createElement('li');
+                oLi.className = 'mine';
+                oLi.innerHTML = `<h4>${cur_username}</h4><p>${oTxt.value}</p>`;
+                oUl.appendChild(oLi);
+            }
+        });
+        socket.on('msg', (name, txt) => { //接收服务器返回的消息
+            let oLi = document.createElement('li');
+            oLi.innerHTML = `<h4>${name}</h4><p>${txt}</p>`;
+            oUl.appendChild(oLi);
+        });
+        oBtnSend.onclick = function() { //向服务器发送消息
+            socket.emit('msg', oTxt.value);
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,54 @@
+mysql分服务端和客户端
+库 -- 文件夹：管理用的，本身不能存数据
+表 -- 文件、表格：存数据
+
+通过主键查询性能高
+
+数据库数据类型：
+数字：
+  整数： tinyint(-128~127或0~255)、int(-21亿~21亿或0~43亿)
+  浮点数： float(小数点后8位)、double(保留小数点后308位)
+字符串：
+  小字符串：varchar(255个字符)
+  大字符串：text(2G)
+
+数据类型，无符号表示全部都是正数，有符号表示数据一半容量表示负数一半表示正数
+主键：四种索引之一，唯一的，性能高
+
+SQL四大基本语句：
+增：
+ 语法： INSERT INTO 表 (字段列表) VALUES(值)
+ 例：   INSERT INTO user_table (name,password,online) VALUES('wangwu','123',0);
+
+删：
+ 语法： DELETE FROM 表 WHERE 条件
+ 例：   DELETE FROM user_table WHERE ID=3
+
+改：
+ 语法： UPDATE 表 SET 字段=新值,字段=新值,...  WHERE 条件
+ 例：   UPDATE user_table SET password='111111' WHERE ID=2;
+
+查：
+ 语法： SELECT 字段列表 FROM 表 WHERE 条件
+ 例:    SELECT name,online FROM user_table WHERE ID=1;
+
+-----------------------------------------------------------------------------
+第一种请求：请求文件
+/1.html
+/1.js
+
+第二种请求： 请求接口
+/reg?xxx
+/login?xxx
+
+-----------------------------------------------------------------------------
+客户端mysql：
+db.query('SQL语句',function(err,data){
+  // err不为空是错误， null表示正确
+  // data，结果，为数组
+  if(err) {
+    socket.emit('ret',0,'数据异常');
+  }else {
+    socket.emit('reg',1,'成功');
+  }
+},);
